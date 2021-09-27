@@ -28,7 +28,7 @@ roslaunch dpgo_ros DPGO.launch
 
 ## References
 
-If you find this library useful, please cite our papers:
+If you find this library useful, please consider citing our papers:
 ```
 @ARTICLE{Tian2021Distributed,
   author={Tian, Yulun and Khosoussi, Kasra and Rosen, David M. and How, Jonathan P.},
