@@ -22,9 +22,11 @@ using namespace DPGO;
 
 namespace dpgo_ros {
 
+typedef std::vector<ros::Subscriber> SubscriberVector;
+
 class PGOAgentROS : public PGOAgent {
  public:
-  PGOAgentROS(const ros::NodeHandle& nh_, unsigned ID,
+  PGOAgentROS(const ros::NodeHandle &nh_, unsigned ID,
               const PGOAgentParameters &params);
 
   ~PGOAgentROS() = default;
@@ -48,7 +50,7 @@ class PGOAgentROS : public PGOAgent {
   double mIterationElapsedMs;
 
   // Global optimization start time
-  std::chrono::time_point<std::chrono::high_resolution_clock> mGlobalStartTime;
+  std::chrono::time_point<std::chrono::high_resolution_clock> mGlobalStartTime, mLastCommandTime;
 
   // Data structures to enforce synchronization during iterations
   std::vector<unsigned> mTeamIterReceived;
@@ -76,6 +78,9 @@ class PGOAgentROS : public PGOAgent {
   // Publish termination command
   void publishTerminateCommand();
 
+  // Publish lifting matrix
+  void publishLiftingMatrix();
+
   // Publish anchor
   void publishAnchor();
 
@@ -83,10 +88,13 @@ class PGOAgentROS : public PGOAgent {
   bool publishTrajectory();
 
   // Publish latest public poses
-  void publishPublicPoses(bool aux);
+  void publishPublicPoses(bool aux = false);
 
   // Publish latest weights for the responsible inter-robot loop closures
   void publishMeasurementWeights();
+
+  // Publish loop closures for visualization
+  void publishLoopClosures();
 
   // Log iteration
   static bool createLogFile(const std::string &filename);
@@ -94,32 +102,36 @@ class PGOAgentROS : public PGOAgent {
   bool logIteration(const std::string &filename) const;
 
   // ROS callbacks
+  void liftingMatrixCallback(const MatrixMsgConstPtr &msg);
   void anchorCallback(const PublicPosesConstPtr &msg);
   void statusCallback(const StatusConstPtr &msg);
   void commandCallback(const CommandConstPtr &msg);
   void publicPosesCallback(const PublicPosesConstPtr &msg);
   void measurementWeightsCallback(const RelativeMeasurementWeightsConstPtr &msg);
-  bool queryLiftingMatrixCallback(QueryLiftingMatrixRequest &request, QueryLiftingMatrixResponse &response);
+  void timerCallback(const ros::TimerEvent &event);
 
   // ROS publisher
+  ros::Publisher mLiftingMatrixPublisher;
   ros::Publisher mAnchorPublisher;
   ros::Publisher mStatusPublisher;
   ros::Publisher mCommandPublisher;
   ros::Publisher mPublicPosesPublisher;
   ros::Publisher mMeasurementWeightsPublisher;
-  ros::Publisher mPoseArrayPublisher;  // Publish optimized trajectory
-  ros::Publisher mPathPublisher;       // Publish optimized trajectory
-  ros::Publisher mPoseGraphPublisher;  // Publish optimized pose graph
+  ros::Publisher mPoseArrayPublisher;    // Publish optimized trajectory
+  ros::Publisher mPathPublisher;         // Publish optimized trajectory
+  ros::Publisher mPoseGraphPublisher;    // Publish optimized pose graph
+  ros::Publisher mLoopClosurePublisher;  // Publish loop closures
 
   // ROS subscriber
-  ros::Subscriber mStatusSubscriber;
-  ros::Subscriber mCommandSubscriber;
-  ros::Subscriber mAnchorSubscriber;
-  ros::Subscriber mPublicPosesSubscriber;
-  ros::Subscriber mMeasurementWeightsSubscriber;
+  SubscriberVector mLiftingMatrixSubscriber;
+  SubscriberVector mStatusSubscriber;
+  SubscriberVector mCommandSubscriber;
+  SubscriberVector mAnchorSubscriber;
+  SubscriberVector mPublicPosesSubscriber;
+  SubscriberVector mMeasurementWeightsSubscriber;
 
-  // ROS service server
-  ros::ServiceServer mQueryLiftingMatrixServer;
+  // ROS timer
+  ros::Timer timer;
 };
 
 }  // namespace dpgo_ros
