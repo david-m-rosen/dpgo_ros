@@ -113,7 +113,7 @@ void PGOAgentROS::runOnce() {
       publishStatus();
 
       // Publish trajectory
-      // publishTrajectory();
+      publishTrajectory();
 
       // Publish loop closures
       publishLoopClosures();
