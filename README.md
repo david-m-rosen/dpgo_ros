@@ -4,7 +4,7 @@
 This repository implements a ROS wrapper for the DPGO library
 
 ## Dependencies
-Inside a catkin workspace, please clone the following repositories:
+Inside a catkin workspace, please clone the following repositories. Use the default branch unless mentioned otherwise below.
 * [catkin_simple](https://github.com/catkin/catkin_simple)
 * [pose_graph_tools](https://github.com/MIT-SPARK/pose_graph_tools/tree/feature/multirobot): please use the `feature/multirobot` branch.
 * [dpgo](https://github.com/mit-acl/dpgo): core C++ library for distributed PGO. 
