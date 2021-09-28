@@ -1,7 +1,9 @@
 # DPGO_ROS
 
 ## Introduction
-This repository implements a ROS wrapper for the DPGO library
+This repository implements a ROS wrapper for the DPGO library. Example results on the Sphere2500 dataset: 
+
+<img src="data/sphere_screenshot.png" width="700">
 
 ## Dependencies
 Inside a catkin workspace, please clone the following repositories. Use the default branch unless mentioned otherwise below.
