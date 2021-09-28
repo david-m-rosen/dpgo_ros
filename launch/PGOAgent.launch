@@ -20,7 +20,7 @@
   <arg name="verbose"                          default="true"/>
   <arg name="max_iteration_number"             default="1000" />
   <arg name="relative_change_tolerance"        default="5e-3" />
-  <arg name="log_directory"                    default="$(find dpgo_ros)/logs/agent$(arg agent_id)/" />
+  <arg name="log_directory"                    default="" />
 
   <!-- GDB: launch-prefix="gnome-terminal -x gdb -ex run \-\-args" -->
   <node ns="dpgo_ros_node" name="agent" pkg="dpgo_ros" type="dpgo_ros_node" output="screen">
